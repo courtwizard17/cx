@@ -19,7 +19,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   files:
-    build: .
+    build: files/
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.files.rule=Host(`n0ll.cx`)"
