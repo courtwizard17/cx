@@ -5,22 +5,32 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
-	http.HandleFunc("/docs/", handleRequest)
+	http.HandleFunc("/", handleRequest)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path[len("/docs/"):]
-
-	filePath := filepath.Join("docs", path)
-
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		w.WriteHeader(http.StatusNotFound)
+	if r.URL.Path == "/" {
+		w.Write([]byte("Nothing here yet"))
 		return
 	}
 
-	http.ServeFile(w, r, filePath)
+	if strings.HasPrefix(r.URL.Path, "/docs/") {
+		path := r.URL.Path[len("/docs/"):]
+		filePath := filepath.Join("docs", path)
+
+		if _, err := os.Stat(filePath); os.IsNotExist(err) {
+			http.NotFound(w, r)
+			return
+		}
+
+		http.ServeFile(w, r, filePath)
+		return
+	}
+
+	http.NotFound(w, r)
 }
