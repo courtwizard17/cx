@@ -22,10 +22,22 @@ services:
     build: files/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.files.rule=Host(`n0ll.cx`)"
+      - "traefik.http.routers.files.rule=Host(`n0ll.cx`) && PathPrefix(`/`)"
       - "traefik.http.routers.files.entrypoints=websecure"
       - "traefik.http.routers.files.tls.certresolver=myresolver"
       - "traefik.http.services.files.loadbalancer.server.port=8080"
+    restart: always
+
+  osrs:
+    build: ./mejrs_wasp_coordinates
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.osrs.rule=Host(`n0ll.cx`) && PathPrefix(`/osrs`)"
+      - "traefik.http.routers.osrs.entrypoints=websecure"
+      - "traefik.http.routers.osrs.tls.certresolver=myresolver"
+      - "traefik.http.services.osrs.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.osrs-stripprefix.stripprefix.prefixes=/osrs"
+      - "traefik.http.routers.osrs.middlewares=osrs-stripprefix"
     restart: always
 
 volumes:
