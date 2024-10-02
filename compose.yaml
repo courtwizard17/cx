@@ -17,7 +17,6 @@ services:
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-
   files:
     build: files/
     labels:
@@ -27,9 +26,8 @@ services:
       - "traefik.http.routers.files.tls.certresolver=myresolver"
       - "traefik.http.services.files.loadbalancer.server.port=8080"
     restart: always
-
   osrs:
-    build: ./mejrs_wasp_coordinates
+    build: mejrs_wasp_coordinates/
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.osrs.rule=Host(`n0ll.cx`) && PathPrefix(`/osrs`)"
@@ -37,8 +35,8 @@ services:
       - "traefik.http.routers.osrs.tls.certresolver=myresolver"
       - "traefik.http.services.osrs.loadbalancer.server.port=80"
       - "traefik.http.middlewares.osrs-stripprefix.stripprefix.prefixes=/osrs"
-      - "traefik.http.routers.osrs.middlewares=osrs-stripprefix"
+      - "traefik.http.middlewares.osrs-headers.headers.customResponseHeaders.Content-Type=text/css;charset=utf-8"
+      - "traefik.http.routers.osrs.middlewares=osrs-stripprefix,osrs-headers"
     restart: always
-
 volumes:
   letsencrypt:
