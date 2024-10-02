@@ -33,10 +33,7 @@ services:
       - "traefik.http.routers.osrs.rule=Host(`n0ll.cx`) && PathPrefix(`/osrs`)"
       - "traefik.http.routers.osrs.entrypoints=websecure"
       - "traefik.http.routers.osrs.tls.certresolver=myresolver"
-      - "traefik.http.services.osrs.loadbalancer.server.port=80"
-      - "traefik.http.middlewares.osrs-stripprefix.stripprefix.prefixes=/osrs"
-      - "traefik.http.middlewares.osrs-headers.headers.customResponseHeaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.osrs.middlewares=osrs-stripprefix,osrs-headers"
+      - "traefik.http.services.osrs.loadbalancer.server.port=8081"
     restart: always
 volumes:
   letsencrypt:
