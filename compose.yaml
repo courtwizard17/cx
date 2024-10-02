@@ -35,7 +35,7 @@ services:
       - "traefik.http.routers.osrs.tls.certresolver=myresolver"
       - "traefik.http.services.osrs.loadbalancer.server.port=80"
       - "traefik.http.middlewares.osrs-stripprefix.stripprefix.prefixes=/osrs"
-      - "traefik.http.middlewares.osrs-headers.headers.customResponseHeaders.Content-Type=text/css;charset=utf-8"
+      - "traefik.http.middlewares.osrs-headers.headers.customResponseHeaders.Content-Type="
       - "traefik.http.routers.osrs.middlewares=osrs-stripprefix,osrs-headers"
     restart: always
 volumes:
