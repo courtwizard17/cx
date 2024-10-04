@@ -2,12 +2,10 @@ FROM golang:latest
 
 WORKDIR /app
 
-COPY go.mod ./
-RUN go mod download
-COPY *.go ./
+COPY server.go .
 
-RUN go build -o server
+RUN go build -o server server.go
 
-EXPOSE 8080
+EXPOSE 8081
 
 CMD ["./server"]
