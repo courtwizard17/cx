@@ -17,10 +17,16 @@ func main() {
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received request for: %s", r.URL.Path)
 
-	// Strip the "/osrs" prefix if present
 	path := strings.TrimPrefix(r.URL.Path, "/osrs")
 
-	if path == "" || path == "/" {
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
+
+	log.Printf("Adjusted path: %s", path)
+
+	if path == "/" {
+		log.Printf("Serving osrs.html")
 		http.ServeFile(w, r, "osrs.html")
 		return
 	}
