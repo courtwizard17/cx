@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	// Handle all requests
 	http.HandleFunc("/", handleRequest)
 
 	log.Println("Server starting on :8081")
@@ -22,7 +21,6 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if strings.HasPrefix(r.URL.Path, "/osrs/") {
-		// Serve static files
 		fs := http.StripPrefix("/osrs/", http.FileServer(http.Dir("/app")))
 		fs.ServeHTTP(w, r)
 		return
