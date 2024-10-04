@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY server.go .
 
-RUN go build -o server server.go
+RUN go build -o /usr/local/bin/server server.go && chmod +x /usr/local/bin/server
 
 EXPOSE 8081
 
-CMD ["./server"]
+CMD ["/usr/local/bin/server"]
