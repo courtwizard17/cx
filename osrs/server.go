@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -14,16 +15,25 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
+	log.Printf("Received request for: %s", r.URL.Path)
+
+	// Strip the "/osrs" prefix if present
+	path := strings.TrimPrefix(r.URL.Path, "/osrs")
+
+	if path == "" || path == "/" {
 		http.ServeFile(w, r, "osrs.html")
 		return
 	}
 
-	filePath := filepath.Join(".", r.URL.Path)
+	filePath := filepath.Join(".", path)
+	log.Printf("Looking for file: %s", filePath)
+
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		log.Printf("File not found: %s", filePath)
 		http.NotFound(w, r)
 		return
 	}
 
+	log.Printf("Serving file: %s", filePath)
 	http.ServeFile(w, r, filePath)
 }
