@@ -32,12 +32,16 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filePath := filepath.Join(".", path)
-	log.Printf("Looking for file: %s", filePath)
-
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		log.Printf("File not found: %s", filePath)
-		http.NotFound(w, r)
-		return
+		altPath := strings.TrimPrefix(path, "/osrs")
+		altFilePath := filepath.Join(".", altPath)
+		log.Printf("File not found, trying alternative path: %s", altFilePath)
+		if _, err := os.Stat(altFilePath); os.IsNotExist(err) {
+			log.Printf("File not found: %s", altFilePath)
+			http.NotFound(w, r)
+			return
+		}
+		filePath = altFilePath
 	}
 
 	log.Printf("Serving file: %s", filePath)
