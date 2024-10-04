@@ -2,6 +2,8 @@ FROM golang:latest
 
 WORKDIR /app
 
+COPY server.go .
+
 RUN go build -o server server.go
 
 RUN mkdir docs
