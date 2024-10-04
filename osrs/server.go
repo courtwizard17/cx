@@ -1,3 +1,19 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+)
+
+func main() {
+	http.HandleFunc("/", handleRequest)
+	log.Printf("Server starting on port 8081")
+	log.Fatal(http.ListenAndServe(":8081", nil))
+}
+
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received request for: %s", r.URL.Path)
 
