@@ -8,11 +8,7 @@ import (
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("/app"))
-	http.Handle("/osrs/", http.StripPrefix("/osrs/", fs))
-
-	http.HandleFunc("/osrs", serveOSRS)
-
+	// Handle all requests
 	http.HandleFunc("/", handleRequest)
 
 	log.Println("Server starting on :8081")
@@ -20,10 +16,18 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	if strings.HasPrefix(r.URL.Path, "/osrs/") {
-		http.Redirect(w, r, "/osrs", http.StatusMovedPermanently)
+	if r.URL.Path == "/osrs" || r.URL.Path == "/osrs/" {
+		serveOSRS(w, r)
 		return
 	}
+
+	if strings.HasPrefix(r.URL.Path, "/osrs/") {
+		// Serve static files
+		fs := http.StripPrefix("/osrs/", http.FileServer(http.Dir("/app")))
+		fs.ServeHTTP(w, r)
+		return
+	}
+
 	http.NotFound(w, r)
 }
 
