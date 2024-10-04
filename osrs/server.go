@@ -22,5 +22,6 @@ func serveOSRS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("Serving file: %s", htmlPath)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	http.ServeFile(w, r, htmlPath)
 }
