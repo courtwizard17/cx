@@ -31,8 +31,7 @@ services:
   osrs:
     image: osrs
     volumes:
-      - osrs_data:/app/data
-    working_dir: /app/data
+      - osrs_data:/app
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.osrs.rule=Host(`n0ll.cx`) && PathPrefix(`/osrs`)"
