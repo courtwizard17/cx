@@ -37,8 +37,6 @@ services:
       - "traefik.http.routers.osrs.rule=Host(`n0ll.cx`) && PathPrefix(`/osrs`)"
       - "traefik.http.routers.osrs.entrypoints=websecure"
       - "traefik.http.routers.osrs.tls.certresolver=myresolver"
-      - "traefik.http.middlewares.osrs-stripprefix.stripprefix.prefixes=/osrs"
-      - "traefik.http.routers.osrs.middlewares=osrs-stripprefix@docker"
       - "traefik.http.services.osrs.loadbalancer.server.port=8081"
     restart: always
 
