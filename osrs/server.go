@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/osrs", serveOSRS)
+	http.HandleFunc("/", serveOSRS)
 	http.Handle("/osrs/", http.StripPrefix("/osrs/", http.FileServer(http.Dir("/app/"))))
 
 	log.Println("Server starting on :8081")
