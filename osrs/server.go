@@ -3,16 +3,24 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
 	http.HandleFunc("/osrs", serveOSRS)
-	http.Handle("/osrs/", http.StripPrefix("/osrs/", http.FileServer(http.Dir("."))))
+	http.Handle("/osrs/", http.StripPrefix("/osrs/", http.FileServer(http.Dir("/app/"))))
 
-	log.Println("Server starting on port 8081")
+	log.Println("Server starting on :8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 func serveOSRS(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "osrs.html")
+	htmlPath := "/app/osrs.html"
+	if _, err := os.Stat(htmlPath); os.IsNotExist(err) {
+		log.Printf("File not found: %s", htmlPath)
+		http.NotFound(w, r)
+		return
+	}
+	log.Printf("Serving file: %s", htmlPath)
+	http.ServeFile(w, r, htmlPath)
 }
